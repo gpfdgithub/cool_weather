@@ -6,7 +6,7 @@ public class Country extends LitePalSupport {
     private String countryName;
     private String countryCode;
     private int cityId;
-    private int weatherId;
+    private String weatherId;
 
     public Country(String countryName, String countryCode) {
         this.countryName = countryName;
@@ -38,11 +38,11 @@ public class Country extends LitePalSupport {
         this.cityId = cityId;
     }
 
-    public int getWeatherId() {
+    public String getWeatherId() {
         return weatherId;
     }
 
-    public void setWeatherId(int weatherId) {
+    public void setWeatherId(String weatherId) {
         this.weatherId = weatherId;
     }
 }

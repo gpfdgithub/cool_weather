@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 
 import org.litepal.LitePal;
-import org.litepal.tablemanager.Connector;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,7 +81,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                         break;
                     }
                     case COUNTRY_TYPE: {
-                        queryWeather();
+                        Intent intent = new Intent(MainActivity.this,WeatherActivity.class);
+                        intent.putExtra("cityId",mCountryList.get(position).getWeatherId());
+                        Log.d(TAG, "onItemClick: " + mCountryList.get(position).getWeatherId());
+                        intent.putExtra("cityName",mCountryList.get(position).getCountryName());
+                        startActivity(intent);
                         break;
                     }
                 }
@@ -90,10 +93,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         });
     }
 
-    private void queryWeather() {
-
-
-    }
 
     private void queryProvince() {
         mProVinceList = LitePal.findAll(ProVince.class);
@@ -214,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 for (int i=0;i < Models.size();i++) {
                     Country country = new Country(Models.get(i).getName(),
                             Models.get(i).getId()+"");
+                    country.setWeatherId(Models.get(i).getWeather_id());
                     country.setCityId(Integer.valueOf(mCitySelected.getCityCode()));
                     country.save();
                 }

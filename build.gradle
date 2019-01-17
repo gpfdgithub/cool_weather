@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.coolweather"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -31,5 +31,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'org.litepal.android:core:2.0.0'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.alibaba:fastjson:1.1.54.android'
+    implementation 'com.android.support:recyclerview-v7:24.2.1'
 }

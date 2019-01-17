@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/allback"
+    tools:context=".WeatherActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/title_city_name"
+            android:textSize="22sp"
+            android:text="AAAAA"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_city_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/temperature"
+            android:textSize="30sp"
+            android:text="AAAAA"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/temperature"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/cond_text"
+            android:text="AAAAA"
+            android:textSize="12sp"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/fore_daily_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titlebar"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/item_background">
+
+        <TextView
+            android:id="@+id/preview_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:text="预报"
+            android:textColor="@color/dark_write"
+            android:textSize="12sp" />
+
+        <ListView
+            android:id="@+id/preview_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/preview_textview"
+            android:layout_margin="10dp"
+            android:divider="@null"
+            android:dividerHeight="6dp"></ListView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/airquity_rellayout"
+        android:layout_below="@+id/fore_daily_relativelayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/air_quailty"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/airquity_rellayout"
+        android:background="@color/item_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/liftstyle_list_item"/>
+    </RelativeLayout>
+</RelativeLayout>
