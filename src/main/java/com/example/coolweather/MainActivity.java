@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 Intent intent = new Intent(MainActivity.this,WeatherActivity.class);
                 intent.putExtra("cityId",ParseUtil.parseResponseNow(weatherInfo).getBasic().getCid());
                 startActivity(intent);
+            } else {
+                queryProvince();
             }
         }
     }

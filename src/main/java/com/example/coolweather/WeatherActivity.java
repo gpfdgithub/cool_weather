@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -94,7 +95,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
     private List<Weather.HeWeather6Bean.LifestyleBean> mLifestyleList;
     private List<Lifestyleitem> mLifeStyleItems = new ArrayList<>();
     private AirQuailty.HeWeather6Bean mAirQuailty;
-    private FloatingActionButton mMenuButton;
+    private ImageButton mMenuButton;
     private NavigationView mNavView;
     private ImageView mHeadProtraitImageView;
 
@@ -227,6 +228,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
         mNavView = findViewById(R.id.nav_view);
         mDrawLayout = findViewById(R.id.drawer_layout);
         mMenuButton = findViewById(R.id.menu_button);
+        Log.d(TAG, "init: "+ mMenuButton.getBackground());
         mMenuButton.setOnClickListener(this);
         mTitleName = findViewById(R.id.title_city_name);
         mTemperatureText = findViewById(R.id.temperature);
@@ -309,6 +311,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.menu_button: {
+                Log.d(TAG, "onClick: "+"menuButton");
                 openMenu();
                 break;
             }
