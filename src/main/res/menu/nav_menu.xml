@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/change_city_item"
+            android:icon="@mipmap/change_city_icon"
+            android:title="@string/exchangecity"
+            app:showAsAction="withText"
+            >
+        </item>
+        <item
+            android:id="@+id/update"
+            android:icon="@mipmap/loading_01"
+            android:title="@string/lastupdate_time"
+            app:showAsAction="withText"
+            >
+        </item>
+    </group>
+</menu>

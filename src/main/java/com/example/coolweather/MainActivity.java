@@ -1,13 +1,21 @@
 package com.example.coolweather;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +33,17 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import util.HttpUtil;
+import util.ParseUtil;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CITYINFOURL = "http://guolin.tech/api/china";
+    private static final String WEATHERINFO = "weatherInfo";
+    private static final String AIRQUALITY = "airquailty";
+    private SharedPreferences mPreferences;
+    private String weatherInfo;
+    private String mAirQualityInfo;
 
     private static final int COUNTRY_TYPE = 1;
     private static final int CITY_TYPE = 2;
@@ -40,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private ListView mListView;
     private String  mResponse;
     private  ArrayAdapter<String> mAdapter;
+    private ImageView mProgress;
 
     private List<ProVince> mProVinceList = new ArrayList<>();
     private List<City> mCityList = new ArrayList<>();
@@ -49,26 +64,18 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private ProVince mProvinceSelected;
     private City mCitySelected;
 
-    private Button mBackButton;
+    private ImageButton mBackButton;
     private TextView mTitle;
+    private AnimationDrawable mProgressDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LitePal.getDatabase();
-        mListView = findViewById(R.id.listview);
-        mBackButton = findViewById(R.id.back_button);
-        mBackButton.setOnClickListener(this);
-        mTitle = findViewById(R.id.city_title);
-        mAdapter =
-                new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1,dataList);
-        mListView.setAdapter(mAdapter);
-        queryProvince();
+        init();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 switch (mlevel) {
                     case PROVINCE_TYPE: {
                         mProvinceSelected = mProVinceList.get(position);
@@ -91,6 +98,45 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 }
             }
         });
+    }
+
+    private void init() {
+        LitePal.getDatabase();
+        mProgress = findViewById(R.id.progress);
+        mListView = findViewById(R.id.listview);
+        mBackButton = findViewById(R.id.back_button);
+        mBackButton.setOnClickListener(this);
+        mTitle = findViewById(R.id.city_title);
+        mAdapter =
+                new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1,dataList);
+        mListView.setAdapter(mAdapter);
+        mProgressDrawable = (AnimationDrawable)mProgress.getDrawable();
+        mProgress.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mProgressDrawable.start();
+            }
+        }, 100);
+        String command = getIntent().getStringExtra("command");
+        if (command != null && command.equals("changeCity")) {
+            queryProvince();
+        } else {
+            isHaveCache();
+        }
+
+    }
+
+    private void isHaveCache() {
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (mPreferences != null) {
+            weatherInfo = mPreferences.getString(WEATHERINFO, null);
+            mAirQualityInfo = mPreferences.getString(AIRQUALITY, null);
+            if (weatherInfo != null && mAirQualityInfo != null) {
+                Intent intent = new Intent(MainActivity.this,WeatherActivity.class);
+                intent.putExtra("cityId",ParseUtil.parseResponseNow(weatherInfo).getBasic().getCid());
+                startActivity(intent);
+            }
+        }
     }
 
 
@@ -159,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
     private void queryForServer() {
+        openProgress();
         switch (mlevel) {
             case PROVINCE_TYPE: {
                 String url = CITYINFOURL;
@@ -186,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private Callback callback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
+            GoneProgress();
             Toast.makeText(MainActivity.this,"网络异常",Toast.LENGTH_SHORT).show();
         }
 
@@ -219,17 +267,34 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 }
                 queryCountry();
             }
+            GoneProgress();
         }
     };
 
     @Override
     public void onClick(View v) {
-
         if(mlevel == CITY_TYPE) {
             queryProvince();
         } else {
             queryCity();
         }
+    }
 
+    private void openProgress(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgress.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void GoneProgress(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mProgress.setVisibility(View.GONE);
+            }
+        });
     }
 }
