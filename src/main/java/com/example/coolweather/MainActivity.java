@@ -32,6 +32,7 @@ import model.ServiceModel;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import util.ActivityCollrector;
 import util.HttpUtil;
 import util.ParseUtil;
 
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: ");
+        ActivityCollrector.addActivity(this);
+        View service = this.getSystemService(View.class);
         init();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,13 +121,16 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 mProgressDrawable.start();
             }
         }, 100);
+        excuteCommand();
+    }
+
+    private void excuteCommand() {
         String command = getIntent().getStringExtra("command");
         if (command != null && command.equals("changeCity")) {
             queryProvince();
         } else {
             isHaveCache();
         }
-
     }
 
     private void isHaveCache() {
@@ -298,5 +305,36 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 mProgress.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+
     }
 }

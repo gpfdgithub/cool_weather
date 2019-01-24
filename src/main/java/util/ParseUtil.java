@@ -20,6 +20,7 @@ public class ParseUtil {
         }
         Gson gson = new Gson();
         Weather weather =  gson.fromJson(response, Weather.class);
+        //Weather weather = (Weather)JSONObject.parse(response);
         return weather.getHeWeather6().get(0);
     }
 
@@ -32,4 +33,6 @@ public class ParseUtil {
         AirQuailty airQuailty =  gson.fromJson(response, AirQuailty.class);
         return airQuailty.getHeWeather6().get(0);
     }
+
+
 }

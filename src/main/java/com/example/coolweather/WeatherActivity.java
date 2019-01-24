@@ -48,6 +48,7 @@ import model.Weather;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import util.ActivityCollrector;
 import util.HttpUtil;
 import util.ParseUtil;
 import view.NestListView;
@@ -60,7 +61,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
     private DrawerLayout mDrawLayout;
     private String mCityId;
     private String mCityName;
-    private  String WEATHERURL = "https://free-api.heweather.net/s6/weather?location=";
+    private String WEATHERURL = "https://free-api.heweather.net/s6/weather?location=";
     private String AIRQUALITYURL = "https://free-api.heweather.net/s6/air/now?location=";
     private static final String APIKEY = "&key=501876c9524c487db26608cc3c9f6fa9";
     private static final String WEATHERINFO = "weatherInfo";
@@ -100,11 +101,11 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
     private ImageView mHeadProtraitImageView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        ActivityCollrector.addActivity(this);
         mView = LayoutInflater.from(this).inflate(R.layout.activity_weather,null);
         init();
         mEditor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
@@ -190,6 +191,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
         mNow = mWeather.getNow();
         dailyForecastBeanList = mWeather.getDaily_forecast();
         mLifestyleList = mWeather.getLifestyle();
+        mLifeStyleItems.clear();
         for (Weather.HeWeather6Bean.LifestyleBean bean : mLifestyleList) {
             if(lifeTypeMap.get(bean.getType()) != null ) {
                 Lifestyleitem item = new Lifestyleitem(bean.getTxt(),
@@ -202,6 +204,7 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mPerViewList.clear();
                 for (Weather.HeWeather6Bean.DailyForecastBean bean:dailyForecastBeanList) {
                     mPerViewList.add(
                             new PerviewListItem(bean.getDate(),
@@ -331,5 +334,11 @@ public class WeatherActivity extends AppCompatActivity implements  View.OnClickL
 
     private void openMenu() {
         mDrawLayout.openDrawer(GravityCompat.START);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollrector.deleteAllActivity();
     }
 }
